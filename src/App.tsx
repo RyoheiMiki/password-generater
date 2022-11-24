@@ -1,8 +1,14 @@
 import { ChangeEvent, useEffect, useState } from "react";
 
+const BASE_STR = "abcdefghijklmnopqrstuvwxyz";
+const NUMS = "0123456789";
+const UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const SYMBOL = "_/$?!&#@%*";
+
 const copyTextToClipboard = async (text: string) => {
   try {
     await navigator.clipboard.writeText(text);
+    alert("コピーしました");
   } catch (error) {
     alert("コピーに失敗しました");
   }
@@ -22,11 +28,6 @@ function App() {
   const [isIncludeSymbol, setIsIncludeSymbol] = useState(false);
   const [passwordLen, setPasswordLen] = useState(8);
 
-  const BASE_STR = "abcdefghijklmnopqrstuvwxyz";
-  const NUMS = "0123456789";
-  const UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const SYMBOL = "_/$?!&#@%*";
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     switch (e.target.value) {
       case "uppercase":
@@ -41,34 +42,35 @@ function App() {
   };
 
   const onClickGenerate = () => {
-    const s = `${BASE_STR}${isIncludeNums ? NUMS : ""}${
+    const str = `${BASE_STR}${isIncludeNums ? NUMS : ""}${
       isIncludeUppercase ? UPPERCASE : ""
     }${isIncludeSymbol ? SYMBOL : ""}`;
 
-    const r = getRandomString(s, passwordLen);
-    setPassword(r);
+    const pass = getRandomString(str, passwordLen);
+    setPassword(pass);
   };
 
   useEffect(() => {
-    const s = getRandomString(BASE_STR, 8);
-    setPassword(s);
+    const pass = getRandomString(BASE_STR, 8);
+    setPassword(pass);
   }, []);
 
   return (
     <>
-      <div className="container min-h-screen p-6">
-        <div className="flex">
+      <div className="flex justify-center items-center min-h-screen p-6 pb-12">
+        <div className="flex justify-center align-middle">
           <div>
-            <h1 className="text-3xl tracking-widest">Password generater</h1>
-            <p>パスーワードの生成を簡単に行うことができます。</p>
+            <h1 className="text-3xl text-center tracking-widest">
+              Password generater
+            </h1>
             <div>
-              <div>
+              <div className="mt-6">
                 <input
                   type="text"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   maxLength={36}
-                  className="w-96 text-center bg-transparent border-solid outline outline-1 p-4"
+                  className="w-96 text-center bg-transparent border-solid outline outline-1 p-4 mt-6"
                 />
               </div>
               <label
@@ -85,9 +87,8 @@ function App() {
                 maxLength={2}
                 max={36}
                 min={8}
-                className="w-20 text-center bg-transparent border-solid outline outline-1 p-4"
+                className="w-20 text-center tracking-widest bg-transparent border-solid outline outline-1 p-4 mt-6"
               />
-
               <div>
                 <div className="flex items-center mb-4">
                   <div className="border">
@@ -96,7 +97,7 @@ function App() {
                       type="checkbox"
                       value="uppercase"
                       onChange={(e) => handleChange(e)}
-                      className="w-8 h-8 appearance-none bg-transparent text-transparent border-transparent outline focus:ring-offset-0 focus:ring-0 cursor-pointer"
+                      className="w-8 h-8 appearance-none bg-transparent text-transparent border-transparent focus:ring-offset-0 focus:ring-0 cursor-pointer"
                     />
                   </div>
                   <label
@@ -143,22 +144,21 @@ function App() {
               </div>
               <button
                 onClick={onClickGenerate}
-                className="outline outline-1 p-4"
+                className="outline outline-1 p-4 hover:bg-white hover:text-black"
               >
                 パスワード再生成
               </button>
               <button
                 onClick={() => copyTextToClipboard(password)}
-                className="outline outline-1 p-4"
+                className="outline outline-1 p-4 hover:bg-white hover:text-black"
               >
                 パスワードをコピーする
               </button>
             </div>
+            <footer className="text-center dark:text-gray-300 mt-10">
+              © 2022 Passwrod Generater. All Rights Reserved.
+            </footer>
           </div>
-          <section>
-            <div></div>
-          </section>
-          <section></section>
         </div>
       </div>
     </>
